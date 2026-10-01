@@ -1,0 +1,1819 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Management System</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f1f7fb;
+    color:#183642;
+}
+
+/* ================= LOGIN ================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#dff8ff,#e9f1ff,#dfffea);
+    padding:20px;
+}
+
+.login-box{
+    width:400px;
+    max-width:100%;
+    background:white;
+    padding:35px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 15px 45px rgba(0,0,0,.15);
+    transition:.4s;
+}
+
+.login-box:hover{
+    transform:translateY(-8px);
+    box-shadow:0 25px 60px rgba(0,150,180,.3);
+}
+
+.hospital-logo{
+    width:90px;
+    height:90px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#0b9ec4;
+    color:white;
+    font-size:50px;
+    font-weight:bold;
+    transition:.4s;
+    box-shadow:0 8px 20px rgba(0,150,190,.3);
+}
+
+.hospital-logo:hover{
+    background:#13c46b;
+    transform:rotate(360deg) scale(1.12);
+}
+
+.login-box h1{
+    margin:18px 0 5px;
+    color:#087f9f;
+    font-size:27px;
+}
+
+.login-box p{
+    color:#667;
+    margin-bottom:22px;
+}
+
+.input-group{
+    text-align:left;
+    margin-bottom:15px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+}
+
+.input-group input,
+.input-group select{
+    width:100%;
+    padding:13px;
+    border:2px solid #d7e5eb;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+    transition:.3s;
+}
+
+.input-group input:focus,
+.input-group select:focus{
+    border-color:#0b9ec4;
+    box-shadow:0 0 10px rgba(11,158,196,.2);
+}
+
+.btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn-primary{
+    background:#0b9ec4;
+    color:white;
+    width:100%;
+}
+
+.btn-primary:hover{
+    background:#08718f;
+    transform:scale(1.03);
+}
+
+.btn-success{
+    background:#16a866;
+    color:white;
+}
+
+.btn-danger{
+    background:#e94b4b;
+    color:white;
+}
+
+.btn-warning{
+    background:#f2a900;
+    color:white;
+}
+
+#otpSection{
+    display:none;
+    margin-top:15px;
+}
+
+.demo-otp{
+    display:none;
+    margin:12px 0;
+    background:#fff6cf;
+    border:1px solid #f0ce4b;
+    padding:10px;
+    border-radius:8px;
+    color:#705900;
+}
+
+/* ================= DASHBOARD ================= */
+
+#dashboard{
+    display:none;
+}
+
+.topbar{
+    height:70px;
+    background:#087f9f;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 3px 15px rgba(0,0,0,.15);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.brand-symbol{
+    width:42px;
+    height:42px;
+    background:white;
+    color:#087f9f;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:25px;
+    transition:.4s;
+}
+
+.brand-symbol:hover{
+    background:#18c778;
+    color:white;
+    transform:rotate(360deg);
+}
+
+.admin-top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.sidebar{
+    position:fixed;
+    top:70px;
+    left:0;
+    width:240px;
+    height:calc(100vh - 70px);
+    background:#103f4d;
+    overflow-y:auto;
+    padding:15px 10px;
+}
+
+.sidebar button{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:#dceff5;
+    text-align:left;
+    padding:13px;
+    border-radius:8px;
+    margin:3px 0;
+    cursor:pointer;
+    font-size:14px;
+    transition:.3s;
+}
+
+.sidebar button:hover{
+    background:#0b9ec4;
+    color:white;
+    transform:translateX(5px);
+}
+
+.main{
+    margin-left:240px;
+    padding:25px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-title{
+    font-size:28px;
+    margin-bottom:8px;
+    color:#086f8c;
+}
+
+.page-subtitle{
+    color:#657b83;
+    margin-bottom:25px;
+}
+
+/* ================= CARDS ================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+    transition:.35s;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+    box-shadow:0 15px 35px rgba(0,120,160,.18);
+}
+
+.stat-icon{
+    font-size:35px;
+}
+
+.stat-number{
+    font-size:30px;
+    font-weight:bold;
+    margin:8px 0;
+    color:#087f9f;
+}
+
+.stat-title{
+    color:#6b7d83;
+}
+
+/* ================= SERVICE CARDS ================= */
+
+.service-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.service-card{
+    min-height:150px;
+    background:white;
+    padding:22px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:.4s;
+    cursor:pointer;
+}
+
+.service-card:hover{
+    transform:translateY(-8px) scale(1.02);
+    background:#087f9f;
+    color:white;
+}
+
+.service-icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.service-card h3{
+    margin-bottom:7px;
+}
+
+/* ================= TABLE ================= */
+
+.table-box{
+    overflow-x:auto;
+    background:white;
+    border-radius:15px;
+    padding:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px;
+    border-bottom:1px solid #e5edf0;
+    text-align:left;
+}
+
+th{
+    background:#eaf8fc;
+    color:#086f8c;
+}
+
+tr:hover{
+    background:#f5fcff;
+}
+
+/* ================= FORMS ================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.form-card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.form-card h2{
+    color:#087f9f;
+    margin-bottom:18px;
+}
+
+/* ================= DOCTORS ================= */
+
+.doctor-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.doctor-card{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    text-align:center;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+    transition:.4s;
+}
+
+.doctor-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 20px 40px rgba(0,130,160,.2);
+}
+
+.doctor-photo{
+    height:180px;
+    background:linear-gradient(135deg,#d9f5ff,#dffbea);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:80px;
+}
+
+.doctor-info{
+    padding:18px;
+}
+
+.doctor-info h3{
+    color:#087f9f;
+    margin-bottom:7px;
+}
+
+/* ================= BLOOD ================= */
+
+.blood-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.blood-card{
+    padding:25px;
+    background:white;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:.4s;
+}
+
+.blood-card:hover{
+    background:#e94b4b;
+    color:white;
+    transform:scale(1.06);
+}
+
+.blood-icon{
+    font-size:40px;
+}
+
+.blood-type{
+    font-size:27px;
+    font-weight:bold;
+    margin:10px;
+}
+
+/* ================= BED ================= */
+
+.bed-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.bed-card{
+    background:white;
+    padding:22px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.bed-card:hover{
+    transform:translateY(-6px);
+}
+
+.available{
+    color:#10a95d;
+    font-weight:bold;
+}
+
+.occupied{
+    color:#e94b4b;
+    font-weight:bold;
+}
+
+/* ================= EMERGENCY ================= */
+
+.emergency-box{
+    background:linear-gradient(135deg,#fff0f0,#fff);
+    border-left:7px solid #e94b4b;
+    padding:30px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+}
+
+.emergency-icon{
+    font-size:55px;
+}
+
+/* ================= ADMIN ================= */
+
+.admin-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.admin-card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.admin-card:hover{
+    transform:translateY(-6px);
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    margin-top:30px;
+    padding:20px;
+    background:#103f4d;
+    color:white;
+    text-align:center;
+    border-radius:12px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1100px){
+    .stats,
+    .service-grid,
+    .doctor-grid,
+    .blood-grid,
+    .bed-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:800px){
+    .sidebar{
+        width:190px;
+    }
+
+    .main{
+        margin-left:190px;
+    }
+
+    .admin-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    .sidebar{
+        position:static;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .topbar{
+        height:auto;
+        min-height:70px;
+        gap:10px;
+    }
+
+    .stats,
+    .service-grid,
+    .doctor-grid,
+    .blood-grid,
+    .bed-grid,
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .brand{
+        font-size:16px;
+    }
+
+    .admin-top{
+        font-size:12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+                     LOGIN PAGE
+========================================================= -->
+
+<section id="loginPage">
+
+<div class="login-box">
+
+    <div class="hospital-logo">✚</div>
+
+    <h1>Hospital Management System</h1>
+    <p>Secure Patient & Hospital Login</p>
+
+    <div class="input-group">
+        <label>📱 Mobile Number</label>
+        <input
+            type="tel"
+            id="mobile"
+            maxlength="10"
+            placeholder="Enter 10 digit mobile number">
+    </div>
+
+    <div class="input-group">
+        <label>🪪 Aadhaar ID</label>
+        <input
+            type="text"
+            id="aadhaar"
+            maxlength="12"
+            placeholder="Enter 12 digit Aadhaar number">
+    </div>
+
+    <button class="btn btn-primary" onclick="sendOTP()">
+        📩 Send OTP
+    </button>
+
+    <div id="otpSection">
+
+        <div class="input-group">
+            <label>🔐 Enter OTP</label>
+            <input
+                type="text"
+                id="otp"
+                maxlength="6"
+                placeholder="Enter 6 digit OTP">
+        </div>
+
+        <div class="demo-otp" id="demoOtp"></div>
+
+        <button class="btn btn-success" style="width:100%;"
+                onclick="verifyOTP()">
+            ✓ Verify OTP
+        </button>
+
+    </div>
+
+    <p style="margin-top:20px;font-size:12px;">
+        Demo system — real Aadhaar/SMS authentication requires
+        authorized services and a secure backend.
+    </p>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+                     DASHBOARD
+========================================================= -->
+
+<section id="dashboard">
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="brand-symbol">✚</div>
+        Hospital Management System
+    </div>
+
+    <div class="admin-top">
+        👨‍💼 Admin
+        <button class="btn btn-danger" onclick="logout()">
+            Logout
+        </button>
+    </div>
+
+</header>
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <button onclick="showPage('home')">🏠 Dashboard</button>
+    <button onclick="showPage('patients')">🧑 Patients</button>
+    <button onclick="showPage('doctors')">👨‍⚕️ Doctors</button>
+    <button onclick="showPage('appointments')">📅 Appointments</button>
+    <button onclick="showPage('departments')">🏥 Departments</button>
+    <button onclick="showPage('blood')">🩸 Blood Bank</button>
+    <button onclick="showPage('emergency')">🚑 Emergency</button>
+    <button onclick="showPage('pharmacy')">💊 Pharmacy</button>
+    <button onclick="showPage('beds')">🛏️ Beds</button>
+    <button onclick="showPage('lab')">🧪 Pathology Lab</button>
+    <button onclick="showPage('location')">📍 Location</button>
+    <button onclick="showPage('admin')">⚙️ Admin Information</button>
+
+</aside>
+
+
+<main class="main">
+
+
+<!-- ================= HOME ================= -->
+
+<div id="home" class="page active">
+
+    <h1 class="page-title">
+        Welcome to Hospital Management System
+    </h1>
+
+    <p class="page-subtitle">
+        Complete hospital administration dashboard
+    </p>
+
+    <div class="stats">
+
+        <div class="card">
+            <div class="stat-icon">🧑</div>
+            <div class="stat-number" id="patientCount">1240</div>
+            <div class="stat-title">Total Patients</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-icon">👨‍⚕️</div>
+            <div class="stat-number">48</div>
+            <div class="stat-title">Doctors</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-icon">🛏️</div>
+            <div class="stat-number">120</div>
+            <div class="stat-title">Hospital Beds</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-icon">🚑</div>
+            <div class="stat-number">24×7</div>
+            <div class="stat-title">Emergency</div>
+        </div>
+
+    </div>
+
+
+    <h2 class="page-title">Hospital Services</h2>
+
+    <div class="service-grid">
+
+        <div class="service-card" onclick="showPage('patients')">
+            <div class="service-icon">🧑‍🤝‍🧑</div>
+            <h3>Patient Registration</h3>
+            <p>Register and manage patients</p>
+        </div>
+
+        <div class="service-card" onclick="showPage('doctors')">
+            <div class="service-icon">👨‍⚕️</div>
+            <h3>Doctors</h3>
+            <p>Doctor information and appointments</p>
+        </div>
+
+        <div class="service-card" onclick="showPage('blood')">
+            <div class="service-icon">🩸</div>
+            <h3>Blood Bank</h3>
+            <p>Blood stock management</p>
+        </div>
+
+        <div class="service-card" onclick="showPage('emergency')">
+            <div class="service-icon">🚑</div>
+            <h3>Emergency</h3>
+            <p>24×7 emergency service</p>
+        </div>
+
+        <div class="service-card" onclick="showPage('pharmacy')">
+            <div class="service-icon">💊</div>
+            <h3>Medical / Pharmacy</h3>
+            <p>Medicine management</p>
+        </div>
+
+        <div class="service-card" onclick="showPage('beds')">
+            <div class="service-icon">🛏️</div>
+            <h3>Bed Management</h3>
+            <p>Available and occupied beds</p>
+        </div>
+
+        <div class="service-card" onclick="showPage('lab')">
+            <div class="service-icon">🧪</div>
+            <h3>Pathology Lab</h3>
+            <p>Laboratory test management</p>
+        </div>
+
+        <div class="service-card" onclick="showPage('location')">
+            <div class="service-icon">📍</div>
+            <h3>Hospital Location</h3>
+            <p>Hospital location and contact</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= PATIENTS ================= -->
+
+<div id="patients" class="page">
+
+    <h1 class="page-title">🧑 Patient Registration</h1>
+    <p class="page-subtitle">
+        Register and manage hospital patients
+    </p>
+
+    <div class="form-card">
+
+        <h2>Patient Details</h2>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+                <label>Patient Name</label>
+                <input id="pName" placeholder="Patient name">
+            </div>
+
+            <div class="input-group">
+                <label>Father's Name</label>
+                <input id="pFather" placeholder="Father's name">
+            </div>
+
+            <div class="input-group">
+                <label>Aadhaar ID</label>
+                <input id="pAadhaar" maxlength="12"
+                       placeholder="Aadhaar number">
+            </div>
+
+            <div class="input-group">
+                <label>Age</label>
+                <input id="pAge" type="number" placeholder="Age">
+            </div>
+
+            <div class="input-group">
+                <label>Gender</label>
+                <select id="pGender">
+                    <option value="">Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Blood Group</label>
+                <select id="pBlood">
+                    <option>Select Blood Group</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Mobile Number</label>
+                <input id="pMobile" maxlength="10"
+                       placeholder="Mobile number">
+            </div>
+
+            <div class="input-group">
+                <label>Address</label>
+                <input id="pAddress" placeholder="Address">
+            </div>
+
+        </div>
+
+        <button class="btn btn-success" onclick="addPatient()">
+            + Register Patient
+        </button>
+
+    </div>
+
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Father Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Blood</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="patientTable">
+
+                <tr>
+                    <td>P001</td>
+                    <td>Rahul Kumar</td>
+                    <td>Raj Kumar</td>
+                    <td>32</td>
+                    <td>Male</td>
+                    <td>B+</td>
+                    <td>
+                        <button class="btn btn-danger"
+                        onclick="deleteRow(this)">
+                        Delete
+                        </button>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ================= DOCTORS ================= -->
+
+<div id="doctors" class="page">
+
+    <h1 class="page-title">👨‍⚕️ Doctors</h1>
+    <p class="page-subtitle">
+        Hospital doctors and medical specialists
+    </p>
+
+    <div class="doctor-grid">
+
+        <div class="doctor-card">
+            <div class="doctor-photo">👨‍⚕️</div>
+            <div class="doctor-info">
+                <h3>Dr. Harshit Mishra</h3>
+                <p>MD / MBBS</p>
+                <p>General Medicine</p>
+                <br>
+                <button class="btn btn-primary">
+                    Appointment
+                </button>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-photo">👨‍⚕️</div>
+            <div class="doctor-info">
+                <h3>Dr. Vishal Singh Chandal</h3>
+                <p>MD / MBBS</p>
+                <p>General Medicine</p>
+                <br>
+                <button class="btn btn-primary">
+                    Appointment
+                </button>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-photo">👨‍⚕️</div>
+            <div class="doctor-info">
+                <h3>Dr. Vikas Kumar</h3>
+                <p>MD / MBBS</p>
+                <p>General Medicine</p>
+                <br>
+                <button class="btn btn-primary">
+                    Appointment
+                </button>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-photo">👨‍⚕️</div>
+            <div class="doctor-info">
+                <h3>Dr. Pradeep Kumar</h3>
+                <p>MD / MBBS</p>
+                <p>General Medicine</p>
+                <br>
+                <button class="btn btn-primary">
+                    Appointment
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= APPOINTMENTS ================= -->
+
+<div id="appointments" class="page">
+
+    <h1 class="page-title">📅 Appointments</h1>
+
+    <div class="form-card">
+
+        <h2>Book Appointment</h2>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+                <label>Patient Name</label>
+                <input placeholder="Patient name">
+            </div>
+
+            <div class="input-group">
+                <label>Doctor</label>
+                <select>
+                    <option>Dr. Harshit Mishra</option>
+                    <option>Dr. Vishal Singh Chandal</option>
+                    <option>Dr. Vikas Kumar</option>
+                    <option>Dr. Pradeep Kumar</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date">
+            </div>
+
+            <div class="input-group">
+                <label>Time</label>
+                <input type="time">
+            </div>
+
+        </div>
+
+        <button class="btn btn-success"
+                onclick="alert('Appointment booked successfully!')">
+            Book Appointment
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= DEPARTMENTS ================= -->
+
+<div id="departments" class="page">
+
+    <h1 class="page-title">🏥 Hospital Departments</h1>
+
+    <div class="service-grid">
+
+        <div class="service-card">❤️<h3>Cardiology</h3></div>
+        <div class="service-card">🦴<h3>Orthopedics</h3></div>
+        <div class="service-card">👶<h3>Pediatrics</h3></div>
+        <div class="service-card">👩<h3>Gynecology</h3></div>
+        <div class="service-card">🧠<h3>Neurology</h3></div>
+        <div class="service-card">👂<h3>ENT</h3></div>
+        <div class="service-card">🩺<h3>General Medicine</h3></div>
+        <div class="service-card">🔬<h3>Pathology</h3></div>
+        <div class="service-card">🦷<h3>Dental</h3></div>
+        <div class="service-card">🩻<h3>Radiology</h3></div>
+        <div class="service-card">🏥<h3>ICU</h3></div>
+        <div class="service-card">💊<h3>Pharmacy</h3></div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= BLOOD ================= -->
+
+<div id="blood" class="page">
+
+    <h1 class="page-title">🩸 Blood Bank</h1>
+    <p class="page-subtitle">
+        Blood stock administration
+    </p>
+
+    <div class="blood-grid">
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">A+</div>
+            <p>Available: 24 Units</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">A-</div>
+            <p>Available: 12 Units</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">B+</div>
+            <p>Available: 30 Units</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">B-</div>
+            <p>Available: 8 Units</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">AB+</div>
+            <p>Available: 10 Units</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">AB-</div>
+            <p>Available: 5 Units</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">O+</div>
+            <p>Available: 35 Units</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="blood-icon">🩸</div>
+            <div class="blood-type">O-</div>
+            <p>Available: 7 Units</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= EMERGENCY ================= -->
+
+<div id="emergency" class="page">
+
+    <h1 class="page-title">🚑 Emergency Department</h1>
+
+    <div class="emergency-box">
+
+        <div class="emergency-icon">🚑</div>
+
+        <h2>24 × 7 Emergency Service</h2>
+
+        <p style="margin:15px 0;">
+            Emergency department available 24 hours.
+        </p>
+
+        <button class="btn btn-danger"
+                onclick="callEmergency()">
+            ☎ Emergency Call
+        </button>
+
+        <button class="btn btn-warning"
+                onclick="requestAmbulance()">
+            🚑 Request Ambulance
+        </button>
+
+    </div>
+
+    <div class="service-grid">
+
+        <div class="service-card">
+            <div class="service-icon">🚑</div>
+            <h3>Ambulance</h3>
+            <p>24×7 ambulance service</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">👨‍⚕️</div>
+            <h3>Emergency Doctor</h3>
+            <p>Emergency medical team</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">🏥</div>
+            <h3>Emergency Ward</h3>
+            <p>Emergency beds</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">❤️</div>
+            <h3>Critical Care</h3>
+            <p>Critical patient support</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= PHARMACY ================= -->
+
+<div id="pharmacy" class="page">
+
+    <h1 class="page-title">💊 Medical / Pharmacy</h1>
+
+    <div class="form-card">
+
+        <h2>Add Medicine</h2>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+                <label>Medicine Name</label>
+                <input id="medicineName"
+                       placeholder="Medicine name">
+            </div>
+
+            <div class="input-group">
+                <label>Medicine Type</label>
+                <select id="medicineType">
+                    <option>Tablet</option>
+                    <option>Capsule</option>
+                    <option>Syrup</option>
+                    <option>Injection</option>
+                    <option>Cream</option>
+                    <option>Ointment</option>
+                    <option>Drops</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Quantity</label>
+                <input id="medicineQty"
+                       type="number"
+                       placeholder="Quantity">
+            </div>
+
+            <div class="input-group">
+                <label>Expiry Date</label>
+                <input id="medicineExpiry" type="date">
+            </div>
+
+        </div>
+
+        <button class="btn btn-success"
+                onclick="addMedicine()">
+            + Add Medicine
+        </button>
+
+    </div>
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Expiry</th>
+                </tr>
+            </thead>
+
+            <tbody id="medicineTable">
+
+                <tr>
+                    <td>Paracetamol</td>
+                    <td>Tablet</td>
+                    <td>500</td>
+                    <td>2027-10-10</td>
+                </tr>
+
+                <tr>
+                    <td>Amoxicillin</td>
+                    <td>Capsule</td>
+                    <td>200</td>
+                    <td>2027-08-20</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ================= BEDS ================= -->
+
+<div id="beds" class="page">
+
+    <h1 class="page-title">🛏️ Bed Management</h1>
+
+    <div class="bed-grid">
+
+        <div class="bed-card">
+            <h2>General Ward</h2>
+            <p>Total: 50</p>
+            <p class="available">Available: 20</p>
+        </div>
+
+        <div class="bed-card">
+            <h2>Private Ward</h2>
+            <p>Total: 30</p>
+            <p class="available">Available: 12</p>
+        </div>
+
+        <div class="bed-card">
+            <h2>ICU</h2>
+            <p>Total: 20</p>
+            <p class="occupied">Available: 4</p>
+        </div>
+
+        <div class="bed-card">
+            <h2>Emergency</h2>
+            <p>Total: 20</p>
+            <p class="available">Available: 10</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= LAB ================= -->
+
+<div id="lab" class="page">
+
+    <h1 class="page-title">🧪 Pathology Laboratory</h1>
+
+    <div class="service-grid">
+
+        <div class="service-card">
+            🩸
+            <h3>Blood Test</h3>
+            <p>Blood examination</p>
+        </div>
+
+        <div class="service-card">
+            🩸
+            <h3>Blood Sugar</h3>
+            <p>Glucose testing</p>
+        </div>
+
+        <div class="service-card">
+            🔬
+            <h3>CBC</h3>
+            <p>Complete blood count</p>
+        </div>
+
+        <div class="service-card">
+            🌡️
+            <h3>Fever Test</h3>
+            <p>Fever-related tests</p>
+        </div>
+
+        <div class="service-card">
+            🧪
+            <h3>Urine Test</h3>
+            <p>Urine examination</p>
+        </div>
+
+        <div class="service-card">
+            🧬
+            <h3>Liver Function</h3>
+            <p>LFT</p>
+        </div>
+
+        <div class="service-card">
+            🧬
+            <h3>Kidney Function</h3>
+            <p>KFT</p>
+        </div>
+
+        <div class="service-card">
+            🔬
+            <h3>Other Tests</h3>
+            <p>Additional laboratory tests</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= LOCATION ================= -->
+
+<div id="location" class="page">
+
+    <h1 class="page-title">📍 Hospital Location</h1>
+
+    <div class="card">
+
+        <div style="font-size:60px;">📍</div>
+
+        <h2>Hospital Location</h2>
+
+        <p style="margin:15px 0;">
+            Add your actual hospital address here.
+        </p>
+
+        <button class="btn btn-primary"
+                onclick="openLocation()">
+            📍 Open Map
+        </button>
+
+    </div>
+
+    <br>
+
+    <div class="emergency-box">
+
+        <h2>☎ Emergency Toll-Free Number</h2>
+
+        <p style="margin:15px 0;">
+            Configure the hospital's official emergency number here.
+        </p>
+
+        <button class="btn btn-danger"
+                onclick="callEmergency()">
+            ☎ Call Emergency
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= ADMIN ================= -->
+
+<div id="admin" class="page">
+
+    <h1 class="page-title">⚙️ Administrator Information</h1>
+
+    <p class="page-subtitle">
+        Hospital administration and management
+    </p>
+
+    <div class="admin-grid">
+
+        <div class="admin-card">
+            <h2>👨‍💼 Administrator</h2>
+            <br>
+            <p><b>Name:</b> Hospital Administrator</p>
+            <p><b>Role:</b> Hospital Administration</p>
+            <p><b>Access:</b> Full Management</p>
+        </div>
+
+        <div class="admin-card">
+            <h2>👨‍⚕️ Doctor Administration</h2>
+            <br>
+            <p>Doctor records</p>
+            <p>Appointments</p>
+            <p>Schedules</p>
+            <p>Departments</p>
+        </div>
+
+        <div class="admin-card">
+            <h2>🩸 Blood Administration</h2>
+            <br>
+            <p>Blood stock</p>
+            <p>Blood requests</p>
+            <p>Donor records</p>
+        </div>
+
+        <div class="admin-card">
+            <h2>💊 Medical Administration</h2>
+            <br>
+            <p>Medicine stock</p>
+            <p>Expiry management</p>
+            <p>Pharmacy records</p>
+        </div>
+
+        <div class="admin-card">
+            <h2>🛏️ Bed Administration</h2>
+            <br>
+            <p>Available beds</p>
+            <p>Occupied beds</p>
+            <p>Patient assignment</p>
+        </div>
+
+        <div class="admin-card">
+            <h2>🧪 Laboratory Administration</h2>
+            <br>
+            <p>Test management</p>
+            <p>Reports</p>
+            <p>Patient test records</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    © 2026 Hospital Management System |
+    Patient • Doctor • Pharmacy • Blood Bank • Laboratory • Emergency
+</footer>
+
+</main>
+
+</section>
+
+
+<script>
+
+/* =========================================================
+                    OTP SYSTEM
+========================================================= */
+
+let generatedOTP = "";
+
+function sendOTP(){
+
+    const mobile = document.getElementById("mobile").value.trim();
+    const aadhaar = document.getElementById("aadhaar").value.trim();
+
+    if(!/^[0-9]{10}$/.test(mobile)){
+        alert("Please enter a valid 10 digit mobile number.");
+        return;
+    }
+
+    if(!/^[0-9]{12}$/.test(aadhaar)){
+        alert("Please enter a valid 12 digit Aadhaar number.");
+        return;
+    }
+
+    generatedOTP =
+        Math.floor(100000 + Math.random() * 900000).toString();
+
+    document.getElementById("otpSection").style.display="block";
+
+    const demo =
+        document.getElementById("demoOtp");
+
+    demo.style.display="block";
+
+    demo.innerHTML =
+        "Demo OTP: <b>" + generatedOTP + "</b>";
+
+    alert("Demo OTP generated. In a real system it must be sent by an authorized SMS service.");
+}
+
+
+/* =========================================================
+                    VERIFY OTP
+========================================================= */
+
+function verifyOTP(){
+
+    const enteredOTP =
+        document.getElementById("otp").value.trim();
+
+    if(enteredOTP === generatedOTP){
+
+        alert("OTP verified successfully!");
+
+        document.getElementById("loginPage")
+            .style.display="none";
+
+        document.getElementById("dashboard")
+            .style.display="block";
+
+        showPage("home");
+
+    }else{
+
+        alert("Incorrect OTP. Please try again.");
+
+    }
+}
+
+
+/* =========================================================
+                    PAGE NAVIGATION
+========================================================= */
+
+function showPage(pageID){
+
+    const pages =
+        document.querySelectorAll(".page");
+
+    pages.forEach(page=>{
+        page.classList.remove("active");
+    });
+
+    const selected =
+        document.getElementById(pageID);
+
+    if(selected){
+        selected.classList.add("active");
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+                    LOGOUT
+========================================================= */
+
+function logout(){
+
+    document.getElementById("dashboard")
+        .style.display="none";
+
+    document.getElementById("loginPage")
+        .style.display="flex";
+
+    document.getElementById("otpSection")
+        .style.display="none";
+
+    document.getElementById("otp").value="";
+
+    generatedOTP="";
+}
+
+
+/* =========================================================
+                    PATIENT
+========================================================= */
+
+function addPatient(){
+
+    const name =
+        document.getElementById("pName").value.trim();
+
+    const father =
+        document.getElementById("pFather").value.trim();
+
+    const age =
+        document.getElementById("pAge").value.trim();
+
+    const gender =
+        document.getElementById("pGender").value;
+
+    const blood =
+        document.getElementById("pBlood").value;
+
+    if(!name || !father || !age || !gender){
+
+        alert("Please fill all required patient fields.");
+
+        return;
+    }
+
+    const table =
+        document.getElementById("patientTable");
+
+    const id =
+        "P" +
+        String(table.rows.length + 2)
+        .padStart(3,"0");
+
+    const row =
+        table.insertRow();
+
+    row.innerHTML = `
+        <td>${id}</td>
+        <td>${escapeHTML(name)}</td>
+        <td>${escapeHTML(father)}</td>
+        <td>${escapeHTML(age)}</td>
+        <td>${escapeHTML(gender)}</td>
+        <td>${escapeHTML(blood)}</td>
+        <td>
+            <button class="btn btn-danger"
+            onclick="deleteRow(this)">
+            Delete
+            </button>
+        </td>
+    `;
+
+    document.getElementById("patientCount").innerText =
+        parseInt(document.getElementById("patientCount").innerText) + 1;
+
+    alert("Patient registered successfully!");
+
+}
+
+
+/* =========================================================
+                    DELETE TABLE ROW
+========================================================= */
+
+function deleteRow(button){
+
+    if(confirm("Delete this record?")){
+
+        button.closest("tr").remove();
+
+    }
+}
+
+
+/* =========================================================
+                    MEDICINE
+========================================================= */
+
+function addMedicine(){
+
+    const name =
+        document.getElementById("medicineName").value.trim();
+
+    const type =
+        document.getElementById("medicineType").value;
+
+    const qty =
+        document.getElementById("medicineQty").value;
+
+    const expiry =
+        document.getElementById("medicineExpiry").value;
+
+    if(!name || !qty || !expiry){
+
+        alert("Please enter medicine details.");
+
+        return;
+    }
+
+    const table =
+        document.getElementById("medicineTable");
+
+    const row =
+        table.insertRow();
+
+    row.innerHTML = `
+        <td>${escapeHTML(name)}</td>
+        <td>${escapeHTML(type)}</td>
+        <td>${escapeHTML(qty)}</td>
+        <td>${escapeHTML(expiry)}</td>
+    `;
+
+    alert("Medicine added successfully!");
+
+}
+
+
+/* =========================================================
+                    EMERGENCY
+========================================================= */
+
+function callEmergency(){
+
+    alert(
+        "Emergency service is available 24×7.\n" +
+        "Configure the official hospital emergency number before deployment."
+    );
+
+    /*
+       Example for a configured number:
+
+       window.location.href = "tel:+91XXXXXXXXXX";
+    */
+}
+
+
+function requestAmbulance(){
+
+    alert(
+        "Ambulance request received.\n" +
+        "Connect this function to your backend/ambulance service."
+    );
+
+}
+
+
+/* =========================================================
+                    LOCATION
+========================================================= */
+
+function openLocation(){
+
+    /*
+       Replace this with the actual hospital's map URL.
+
+       Example:
+
+       window.open(
+           "https://maps.google.com/?q=YOUR_HOSPITAL",
+           "_blank"
+       );
+    */
+
+    alert(
+        "Add the hospital's actual Google Maps/location URL here."
+    );
+
+}
+
+
+/* =========================================================
+                    HTML SECURITY HELPER
+========================================================= */
+
+function escapeHTML(value){
+
+    return value
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
+```
